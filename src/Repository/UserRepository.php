@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Repository;
+
+use App\Model\User;
+
+class UserRepository implements RepositoryInterface
+{
+    protected \PDO $db;
+
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function getById($id)
+    {
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE id = :id');
+        $stmt->execute(array(':id' => $id));
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getByEmail($email)
+    {
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email');
+        $stmt->execute(array(':email' => $email));
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public function getByEmailAndPass($email, $password)
+    {
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email AND password = :password');
+        $stmt->execute(array(':email' => $email, ':password' => $password));
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAll()
+    {
+        $stmt = $this->db->prepare('SELECT * FROM users');
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param $data
+     * @return int
+     */
+    public function insert($data): int
+    {
+        $user = $this->getByEmail($data->getEmail());
+        if (empty($user)) {
+            try {
+                $query = "INSERT INTO users (first_name,last_name,password,email,created_at) VALUES (?,?,?,?,?)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute([
+                    $data->getFirstName(),
+                    $data->getLastName(),
+                    $data->getPassword(),
+                    $data->getEmail(),
+                    $data->getCreatedAt()
+                ]);
+
+                return $stmt->rowCount();
+            } catch (\Exception $ex) {
+                echo $ex->getMessage();
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param User $data
+     * @return mixed
+     */
+    public function update($data)
+    {
+        $user = $this->getByEmail($data->getEmail());
+        if ($user){
+            $query = "UPDATE users SET first_name = ?, SET last_name = ?, SET password = ?, SET email = ?, SET modified_at = ? WHERE id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([
+                $data->getFirstName(),
+                $data->getLastName(),
+                $data->getPassword(),
+                $data->getEmail(),
+                $data->getModifiedAt(),
+                $data->getId()
+            ]);
+
+            return $stmt->rowCount();
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        $query = "DELETE FROM users WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([$id]);
+
+        return $stmt->rowCount();
+    }
+}
