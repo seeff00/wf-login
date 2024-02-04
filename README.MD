@@ -23,4 +23,4 @@ docker-compose up -d
 
 Open your favorite browser and enter '<b>localhost</b>' in the URL field.
 
-![home.jpg](home.jpg)
+![home.jpg](..%2F..%2FDesktop%2Fhome.jpg)
