@@ -8,12 +8,16 @@ class UserRepository implements RepositoryInterface
 {
     protected \PDO $db;
 
+    /**
+     * @param $db
+     */
     public function __construct($db)
     {
         $this->db = $db;
     }
 
     /**
+     * Retrieves user from database by ID
      * @param $id
      * @return mixed
      */
@@ -25,6 +29,11 @@ class UserRepository implements RepositoryInterface
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Retrieves user from database by e-mail address
+     * @param $email
+     * @return mixed
+     */
     public function getByEmail($email)
     {
         $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email');
@@ -33,6 +42,12 @@ class UserRepository implements RepositoryInterface
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Retrieves user from database by e-mail address and password
+     * @param $email
+     * @param $password
+     * @return mixed
+     */
     public function getByEmailAndPass($email, $password)
     {
         $stmt = $this->db->prepare('SELECT * FROM users WHERE email = :email AND password = :password');
@@ -42,6 +57,7 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
+     * Retrieves all users from database
      * @return mixed
      */
     public function getAll()
@@ -53,6 +69,7 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
+     * Insert new user in database
      * @param $data
      * @return int
      */
@@ -81,10 +98,11 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
+     * Update existing user
      * @param User $data
-     * @return mixed
+     * @return int
      */
-    public function update($data)
+    public function update($data): int
     {
         $user = $this->getByEmail($data->getEmail());
         if ($user){
@@ -106,10 +124,11 @@ class UserRepository implements RepositoryInterface
     }
 
     /**
+     * Deletes existing user by ID
      * @param $id
-     * @return mixed
+     * @return int
      */
-    public function delete($id)
+    public function delete($id): int
     {
         $query = "DELETE FROM users WHERE id = ?";
         $stmt = $this->db->prepare($query);

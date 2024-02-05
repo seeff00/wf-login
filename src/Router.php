@@ -6,8 +6,18 @@ use Exception;
 
 class Router
 {
+    /**
+     * @var array
+     */
     protected array $routes = [];
 
+    /**
+     * Creates HTTP GET route handler
+     * @param $route
+     * @param $controller
+     * @param $action
+     * @return void
+     */
     public function get($route, $controller, $action) {
         if ($_SERVER["REQUEST_METHOD"] !== 'GET'){
             return;
@@ -16,6 +26,13 @@ class Router
         $this->routes[$route] = ['controller' => $controller, 'action' => $action];
     }
 
+    /**
+     * Creates HTTP POST route handler
+     * @param $route
+     * @param $controller
+     * @param $action
+     * @return void
+     */
     public function post($route, $controller, $action) {
         if ($_SERVER["REQUEST_METHOD"] !== 'POST'){
             return;
@@ -24,6 +41,13 @@ class Router
         $this->routes[$route] = ['controller' => $controller, 'action' => $action];
     }
 
+    /**
+     * Creates HTTP PUT route handler
+     * @param $route
+     * @param $controller
+     * @param $action
+     * @return void
+     */
     public function put($route, $controller, $action) {
         if ($_SERVER["REQUEST_METHOD"] !== 'PUT'){
             return;
@@ -32,6 +56,13 @@ class Router
         $this->routes[$route] = ['controller' => $controller, 'action' => $action];
     }
 
+    /**
+     * Creates HTTP DELETE route handler
+     * @param $route
+     * @param $controller
+     * @param $action
+     * @return void
+     */
     public function delete($route, $controller, $action) {
         if ($_SERVER["REQUEST_METHOD"] !== 'DELETE'){
             return;
@@ -41,6 +72,7 @@ class Router
     }
 
     /**
+     * Dispatch registered routes and handles unregistered
      * @throws Exception
      */
     public function dispatch($uri) {

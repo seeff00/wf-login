@@ -15,9 +15,10 @@ To install the project locally type the following commands in your terminal:
 ```shell
 git clone https://github.com/seeff00/wf-login.git
 cd wf-login
+docker-compose up -d
+docker exec -it php bash
 mv .env.dev .env
 composer install
-docker-compose up -d
 ```
 
 ### Usage

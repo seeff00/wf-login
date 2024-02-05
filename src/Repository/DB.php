@@ -9,6 +9,10 @@ class DB
 {
     protected static PDO $instance;
 
+    /**
+     * Based on Singleton pattern this function always returns a single PDO instance
+     * @return PDO
+     */
     public static function getInstance(): PDO
     {
         if(empty(self::$instance)) {

@@ -8,11 +8,19 @@ use App\Repository\UserRepository;
 
 class UserController extends BaseController
 {
+    /**
+     * User index action handler
+     * @return void
+     */
     public function index()
     {
         $this->render('user/index', $_COOKIE);
     }
 
+    /**
+     * User login GET action handler
+     * @return void
+     */
     public function login()
     {
         if (isset($_COOKIE["is_logged"]) && $_COOKIE["is_logged"]) {
@@ -23,6 +31,10 @@ class UserController extends BaseController
         $this->render('user/login', $_COOKIE);
     }
 
+    /**
+     * User login POST action handler
+     * @return void
+     */
     public function loginPost()
     {
         $email = trim($_POST['email']);
@@ -35,6 +47,10 @@ class UserController extends BaseController
         echo json_encode($user);
     }
 
+    /**
+     * User registration GET action handler
+     * @return void
+     */
     public function register()
     {
         if (isset($_COOKIE["is_logged"]) && $_COOKIE["is_logged"]) {
@@ -45,6 +61,10 @@ class UserController extends BaseController
         $this->render('user/register', $_COOKIE);
     }
 
+    /**
+     * User registration POST action handler
+     * @return void
+     */
     public function registerPost()
     {
         header("Content-Type: application/json");
@@ -82,6 +102,10 @@ class UserController extends BaseController
         echo $userRepo->insert($newUser);
     }
 
+    /**
+     * User logout GET action handler
+     * @return void
+     */
     public function logout()
     {
         if (isset($_COOKIE["is_logged"]) && $_COOKIE["is_logged"]) {
